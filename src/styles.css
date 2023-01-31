@@ -1,0 +1,98 @@
+html, body, #root, #root>div {
+    height: 100%;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.box {  
+    width: 90%;
+    border: 2px solid;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-grow: 20;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.rung {
+    border-top: 1px solid black;
+    width: 100%;
+}
+
+.vertLineRight {
+    flex-grow: 15;
+    position: relative;
+    left: 50%;
+    border-left: 1px solid black;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    animation: animate 3s infinite;
+}
+
+@keyframes animate {
+    0% {
+        border-color: black;
+    }
+
+    50% {
+        border-image: linear-gradient(to bottom, red 50%, black 100%) 5;
+    }
+
+    100% {
+        border-color: red;
+    }
+}
+
+.vertLineLeft {
+    flex-grow: 15;
+    position: relative;
+    border-right: 1px solid black;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.counter {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+.button {
+    font-size: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 30px;
+}
+
+.result {
+    flex-grow: 5;   
+}
+
+.resultList {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
