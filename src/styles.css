@@ -23,6 +23,8 @@ html, body, #root, #root>div {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    min-width: 125px;
+    text-align: center;
 }
 
 .rung {
@@ -34,13 +36,13 @@ html, body, #root, #root>div {
     flex-grow: 15;
     position: relative;
     left: 50%;
-    border-left: 1px solid black;
+    border-left: 2px solid black;
     height: 100%;
     width: 50%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    animation: animate 3s infinite;
+    animation: animate 5s ease-in forwards;
 }
 
 @keyframes animate {
@@ -48,24 +50,9 @@ html, body, #root, #root>div {
         border-color: black;
     }
 
-    50% {
-        border-image: linear-gradient(to bottom, red 50%, black 100%) 5;
-    }
-
     100% {
         border-color: red;
     }
-}
-
-.vertLineLeft {
-    flex-grow: 15;
-    position: relative;
-    border-right: 1px solid black;
-    height: 100%;
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
 }
 
 .counter {
@@ -99,4 +86,5 @@ html, body, #root, #root>div {
 
 .input {
     margin: 3px;
+    text-align: center;
 }
