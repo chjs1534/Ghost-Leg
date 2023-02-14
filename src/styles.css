@@ -24,6 +24,23 @@ html, body, #root, #root>div {
     justify-content: space-evenly;
 }
 
+.inputsBotContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.input {
+    margin: 3px;
+    text-align: center;
+    flex: 1;
+}
+
+.inputsText {
+    flex: 1;
+    text-align: center;
+}
+
 .grid {
     height: 80%;
     display: flex;
@@ -33,45 +50,65 @@ html, body, #root, #root>div {
 .row {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-evenly;
     flex: 1;
+    position: relative;
+}
+
+.nodeContainer {
+    flex: 1;
+    display: flex;
 }
 
 .node-full {
     border-left: 1px solid;
     border-bottom: 1px solid;
+    position: relative;
+    left: 50%;
     flex: 1;
 }
 
 .node-full-visited {
     border-left: 1px solid red;
     border-bottom: 1px solid red;
+    position: relative;
+    left: 50%;
     flex: 1;
 }
 
 .node-full-visited-bot {
     border-left: 1px solid;
     border-bottom: 1px solid red;
+    position: relative;
+    left: 50%;
     flex: 1;
 }
 
 .node-left {
     border-left: 1px solid;
+    position: relative;
+    left: 50%;
     flex: 1;
 }
 
 .node-left-visited {
     border-left: 1px solid red;
+    position: relative;
+    left: 50%;
     flex: 1;
 }
 
 .node-bottom {
     border-bottom: 1px solid;
+    position: relative;
+    left: 50%;
     flex: 1;
 }
 
 .node-bottom-visited {
     border-bottom: 1px solid red;
+    position: relative;
+    left: 50%;
     flex: 1;
 }
 
@@ -102,9 +139,4 @@ html, body, #root, #root>div {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-}
-
-.input {
-    margin: 3px;
-    text-align: center;
 }

@@ -1,108 +1,69 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import './styles.css';
 
 const Setter = (props) => {
+	const iMax = 50
 
-	// const handle = (e, index, row) => {
-	// 	if (row === "top") {
-	// 		const temp = inputsTop
-	// 		temp[index] = e.target.value
-	// 		setInputsTop(temp)
-	// 	} else {
-	// 		const temp = inputsBot
-	// 		temp[index] = e.target.value
-	// 		setInputsBot(temp)
-	// 	}
-	// }
+	const traverse = (i, j) => {
+		i = 0
+		j = 1
+		while (i != iMax) {
+			let copy = [...props.visited]
+			copy[i][j] = 1
+			props.setVisited(copy)
+			if (props.grid[i][j].bottom) {
+				// right
+				j++
+			} else if (j-1 >= 0 && props.grid[i][j-1].bottom){
+				// left
+				copy = [...props.visited]
+				copy[i][j-1] = 0
+				props.setVisited(copy)
+				j--
+			}
+			// down
+			i++
+		}
+	}
+
+	const handle = (e, index, row) => {
+		if (row === "top") {
+			props.setTopValues(topVal => topVal.map((v, i) => {
+				if (i === index) return <div key={i} className="inputsText" onClick={traverse}>
+					{e.target.value}</div>
+				return v
+			}))
+		} else {
+			props.setBotValues(botVal => botVal.map((v, i) => {
+				if (i === index) return <div key={i} className="inputsText">{e.target.value}</div>
+				return v
+			}))
+		}
+	}
 
 	const increment = () => {
-		if (props.count < 10) {
+		if (props.count < 6) {
+			props.setInputsTop([...props.inputsTop, 
+				<input className="input" type="text" key={props.count}
+					onChange={e => handle(e, props.count, "top")}></input>])
+			props.setInputsBot([...props.inputsBot, 
+				<input className="input" type="text" key={props.count}
+					onChange={e => handle(e, props.count, "bot")}></input>])
 			props.setCount(props.count + 1)
-			props.setInputsMatch([...props.inputsMatch, <input className="input"></input>])
+			props.setTopValues([...props.topValues, ""]) // change
+			props.setBotValues([...props.botValues, ""]) // change
 		}
 	}
 
 	const decrement = () => {
 		if (props.count > 2) {
 			props.setCount(props.count - 1)
-			props.setInputsMatch(props.inputsMatch.slice(0, -1))
+			props.setInputsTop(props.inputsTop.slice(0, -1))
+			props.setInputsBot(props.inputsBot.slice(0, -1))
+			props.setTopValues(props.topValues.slice(0, -1))
+			props.setBotValues(props.botValues.slice(0, -1))
 		}
 	}
-
-	// const generate = () => {
-	// 	const gcd = (a, b) => {
-	// 		while (a !== b) 
-	// 			if (a > b) a = a - b
-	// 			else b = b - a
-	// 		return a
-	// 	}
-
-	// 	// add rungs
-	// 	const nums = new Set([])
-	// 	let prev = 0
-	// 	while (nums.size < count - 1) {
-	// 		let curr = Math.floor(Math.random()*8)+1
-	// 		// gcd has to be different
-	// 		while (gcd(curr+1, prev+1) !== 1) {
-	// 			curr = Math.floor(Math.random()*8)+1
-	// 		}
-	// 		if (nums.size < nums.add(curr).size) prev = curr
-	// 	}
-
-	// 	const list = []
-	// 	for (const num of nums.values()) {
-	// 		const temp = []
-	// 		for (let i = 0; i < num; i++) {
-	// 			temp.push(<div className="rung" key={i}></div>)
-	// 		}
-	// 		list.push(temp)
-	// 	}
-	// 	list.push([])
-		
-	// 	props.setColumns(
-	// 		oldCols => oldCols.map(
-	// 			(_, i) => {
-	// 				return (
-	// 					<div className="column" key={i}>
-	// 						<p className="text" onClick={showPath}>{inputsTop[i]}</p>
-	// 						<div className="vertLineRight">
-	// 							{list[i]}
-	// 						</div>
-	// 						<p className="text">{inputsBot[i]}</p>
-	// 					</div>
-	// 				)
-	// 			}
-	// 		)
-	// 	)
-		
-	// 	// get result
-	// 	let a = []
-	// 	let result = []
-	// 	// get swaps in order
-	// 	let index = 0
-	// 	for (const num of nums.values()) {
-	// 		result.push(index)
-	// 		for (let i = 1; i < num+1; i++) {
-	// 			a.push([i/(num+1), index])
-	// 		}
-	// 		index++
-	// 	}
-	// 	result.push(index)
-	// 	a.sort()
-		
-	// 	// perform swaps
-	// 	for (let i = 0; i < a.length; i++) {
-	// 		const temp = result[a[i][1]]
-	// 		result[a[i][1]] = result[a[i][1]+1]
-	// 		result[a[i][1]+1] = temp
-	// 	}
-
-	// 	let temp = []
-	// 	for (let i = 0; i < result.length; i++) {
-	// 		temp.push(inputsTop[result[i]] + " = " + inputsBot[i])
-	// 	}
-	// 	props.setInputsMatch(temp)
-	// }
 
 	return (
 		<div>
@@ -128,38 +89,16 @@ const Node = (props) => {
 	if (props.visited === 0) className += "-visited-bot"
 
 	return (
-		<div className={className} key={props.j}></div>
+		<div className="nodeContainer">
+			<div className={className} key={props.j}></div>
+		</div>
 	)
 }
 
 const Grid = (props) => {
-	const grid = []
 	const iMax = 50
 	const jMax = props.count
-	const initialArray = Array.from({length: iMax}, () => Array.from({length: jMax}, () => -1))
-	const [visited, setVisited] = useState(initialArray)
-
-	const traverse = (i, j) => {
-		i = 0
-		j = 0
-		while (i != iMax) {
-			let copy = [...visited]
-			copy[i][j] = 1
-			setVisited(copy)
-			if (grid[i][j].bottom) {
-				// right
-				j++
-			} else if (j-1 >= 0 && grid[i][j-1].bottom){
-				// left
-				copy = [...visited]
-				copy[i][j-1] = 0
-				setVisited(copy)
-				j--
-			}
-			// down
-			i++
-		}
-	}
+	let gr = []
 
 	for (let i = 0; i < iMax; i++) {
 		const row = []
@@ -171,27 +110,31 @@ const Grid = (props) => {
 				j: j,
 				bottom: bottom,
 				left: true,
-				visited: visited[i][j]
+				vi: props.visited[i][j]
 			}
 			row.push(currentNode)
 		}
-		grid.push(row)
+		gr.push(row)
 	}
+
+	useEffect(() => {
+		props.setGrid(gr)
+	}, [gr])
 	
 	return (
 		<>
 			<div className="grid">
-				{grid.map((row, i) => {
+				{props.grid.map((row, i) => {
 					return (
 						<div key={i} className="row">
 							{row.map((node, j) => {
-								const {row, col, bottom, left, visited} = node
+								const {row, col, bottom, left, vi} = node
 								return (
 									<Node
 										key={j}
 										bottom={bottom}
 										left={left}
-										visited={visited}
+										visited={vi}
 									/>
 								)
 							})
@@ -201,16 +144,7 @@ const Grid = (props) => {
 				})
 				}
 			</div>
-			<button onClick={traverse}>Traverse</button>
 		</>
-	)
-}
-
-const InputTop = (props) => {
-	return (
-		<div className="inputsTopContainer">
-			{props.inputsMatch}
-		</div>
 	)
 }
 
@@ -228,13 +162,22 @@ const Box = (props) => {
 			const idx = Math.floor(Math.random() * (props.count - 1)) 
 			setActive(active => [...active, [num, idx]])
 		}
+		
+		props.setInputsTop(props.topValues)
+		props.setInputsBot(props.botValues)
 	}
 
 	return (
 		<div className="box">
 			<button onClick={generate}>Start</button>
-			<InputTop inputsMatch={props.inputsMatch} />
-			<Grid count={props.count} active={active} />
+			<div className="inputsTopContainer">
+				{props.inputsTop}
+			</div>
+			<Grid count={props.count} active={active} grid={props.grid} setGrid={props.setGrid}
+			visited={props.visited} />
+			<div className="inputsBotContainer">
+				{props.inputsBot}
+			</div>
 		</div>
 	)
 }
@@ -251,14 +194,26 @@ const Result = (props) => {
 
 const App = () => {
 	const [count, setCount] = useState(0)
-	const [inputsMatch, setInputsMatch] = useState([])
+	const [inputsTop, setInputsTop] = useState([])
+	const [inputsBot, setInputsBot] = useState([])
+	const [topValues, setTopValues] = useState([])
+	const [botValues, setBotValues] = useState([])
+	const jMax = count
+	const [visited, setVisited] = useState(Array.from({length: 50}, 
+		() => Array.from({length: jMax}, () => -1)))
+	const [grid, setGrid] = useState([])
 
     return (
 		<div className="page">
-			<Setter count={count} setCount={setCount} inputsMatch={inputsMatch}
-				setInputsMatch={setInputsMatch} />
-			<Box count={count} inputsMatch={inputsMatch}/>
-			<Result inputsMatch={inputsMatch} />
+			<Setter count={count} setCount={setCount} inputsTop={inputsTop}
+				setInputsTop={setInputsTop} inputsBot={inputsBot} setInputsBot={setInputsBot}
+				topValues={topValues} setTopValues={setTopValues} botValues={botValues}
+				setBotValues={setBotValues} visited={visited} setVisited={setVisited} 
+				grid={grid} setGrid={setGrid} />
+			<Box count={count} inputsTop={inputsTop} inputsBot={inputsBot} setInputsTop={setInputsTop}
+				setInputsBot={setInputsBot} topValues={topValues} botValues={botValues}
+				visited={visited} grid={grid} setGrid={setGrid} />
+			{/* <Result inputsMatch={inputsMatch} /> */}
 		</div>
     )
 }
