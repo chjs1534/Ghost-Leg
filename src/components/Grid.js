@@ -1,85 +1,65 @@
-import { useEffect, useImperativeHandle, useState } from "react"
+import { useEffect, useState} from "react"
 import Node from "./Node"
 
-export default function Grid(props) {
-	useEffect(() => {
-        if (props.doTraverse !== -1) console.log("hello")
-    }, [props.doTraverse])
-
-    //     traverse(i, j) {
-    //         console.log("why")
-    //         i = 0
-    //         j = 0
-    //         while (i != iMax) {
-    //             let copy = [...visited]
-    //             copy[i][j] = 1
-    //             setVisited(copy)
-    //             if (grid[i][j].bottom) {
-    //                 // right
-    //                 j++
-    //             } else if (j-1 >= 0 && grid[i][j-1].bottom){
-    //                 // left
-    //                 copy = [...visited]
-    //                 copy[i][j-1] = 0
-    //                 setVisited(copy)
-    //                 j--
-    //             }
-    //             // down
-    //             i++
-    //         }
-    //     }
-    // }))
-    
-    
-    const [layout, dispatch] = [props.layout, props.dispatch]
-    const grid = []
+export default function Grid(props) { 
+    const layout = props.layout
 	const iMax = 50
 	const jMax = layout.count
-	const initialArray = Array.from({length: iMax}, () => Array.from({length: jMax}, () => -1))
-	const [visited, setVisited] = useState(initialArray)
+    const [visited, setVisited] = useState(new Map())
+    const [row, setRow] = useState(-1)
+    const [col, setCol] = useState(-1)
 
-	for (let i = 0; i < iMax; i++) {
-		const row = []
-		for (let j = 0; j < jMax; j++) {
-			const bottom = (i === iMax-1 || j === jMax-1 || 
-				!props.active.some(element => element[0] === i && element[1] === j)) ? false : true
-			const currentNode = {
-				i: i,
-				j: j,
-				bottom: bottom,
-				left: true,
-				visited: visited[i][j]
-			}
-			row.push(currentNode)
-		}
-		grid.push(row)
-	}
+    const checkRung = (i, j) => {
+        return i !== iMax-1 && j !== jMax-1 && 
+            props.active.some(el => el[0] === i && el[1] === j)
+    }
 
-    // console.log(grid)
+    useEffect(() => {
+        if (row >= 0 && row < iMax) {
+            setTimeout(() => {
+                // traverse
+                setVisited(new Map(visited.set(row*jMax+col, 1)))
+                if (checkRung(row, col)) {
+                    // right
+                    setCol(col => col + 1)
+                } else if (col-1 >= 0 && checkRung(row, col-1)) {
+                    // left
+                    setVisited(new Map(visited.set(row*jMax+col-1, 0)))
+                    setCol(col => col - 1)
+                }
+                setRow(row => row + 1)
+            }, 100)
+        }
+    }, [row])
+    
+	useEffect(() => {
+        if (props.doTraverse !== -1 && props.doTraverse !== null) {
+            setVisited(vis => new Map(vis.clear()))
+            setCol(props.doTraverse)
+            setRow(0)
+        }
+    }, [props.doTraverse])
 
 	return (
-		<>
-			<div className="grid">
-				{grid.map((row, i) => {
-					return (
-						<div key={i} className="row">
-							{row.map((node, j) => {
-								const {row, col, bottom, left, vi} = node
-								return (
-									<Node
-										key={j}
-										bottom={bottom}
-										left={left}
-										visited={vi}
-									/>
-								)
-							})
-							}
-						</div>
-					)
-				})
-				}
-			</div>
-		</>
+        <div className="grid">
+            {[...Array(iMax)].map((_, i) => {
+                return (
+                    <div key={i} className="row">
+                        {[...Array(jMax)].map((_, j) => {
+                            return (
+                                <Node
+                                    key={i*jMax+j}
+                                    bottom={checkRung(i, j)}
+                                    left={true}
+                                    visited={visited.has(i*jMax+j) ? visited.get(i*jMax+j) : -1}
+                                />
+                            )
+                        })
+                        }
+                    </div>
+                )
+            })
+            }
+        </div>
 	)
 }

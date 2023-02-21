@@ -1,18 +1,21 @@
 export default function Node(props) {
-	let className = "node"
-	const extraClassName = 
-		(props.bottom && props.left) ? "-full" : 
-		(!props.bottom && !props.left) ? "" : 
-		(!props.left && props.bottom) ? "-bottom" :
-		"-left"
-	className += extraClassName
-
-	if (props.visited === 1) className += "-visited"
-	if (props.visited === 0) className += "-visited-bot"
-
 	return (
 		<div className="nodeContainer">
-			<div className={className} key={props.j}></div>
+			<div
+                key={props.j}
+                style={
+                    {
+                    borderLeft: props.left ? (props.visited === 1
+                         ? "2px solid red" : "2px solid") : "",
+                    borderBottom: props.bottom ? (props.visited === 1 
+                        || props.visited === 0 ? "2px solid red" : "2px solid") : "",
+                    position: "relative",
+                    left: "50%",
+                    flex: 1
+                    }
+                }
+            >
+            </div>
 		</div>
 	)
 }

@@ -1,4 +1,4 @@
-import { useReducer, useState } from "react"
+import { useReducer } from "react"
 import Box from "./Box"
 import { INITIAL_STATE, layoutReducer } from "./layoutReducer"
 
@@ -43,13 +43,20 @@ export default function Setter() {
 		}
 	}
 
+    const generateRungs = () => {
+        dispatch({type:"GENRUNGS"})
+    }
+
 	return (
 		<div className="page">
-			<div className="counter">
-				<button onClick={decrement} className="button">-</button>
-				<h1>{layout.count}</h1>
-				<button onClick={increment} className="button">+</button>
-			</div>
+            <div className="controls">
+                <button onClick={generateRungs}>Start</button>  
+                <div className="counter">
+                    <button onClick={decrement} className="button">-</button>
+                    <h1>{layout.count}</h1>
+                    <button onClick={increment} className="button">+</button>
+                </div>
+            </div>
             <Box layout={layout} dispatch={dispatch} />
 		</div>
 	)
