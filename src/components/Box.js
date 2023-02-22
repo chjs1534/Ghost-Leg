@@ -19,9 +19,20 @@ export default function Box(props) {
 
 	return (
 		<div className="box">
-			<div className="inputsTopContainer">{labels ? layout.valuesTop : layout.inputsTop}</div>
-			<Grid doTraverse={doTraverse} active={layout.activeRungs} layout={layout} dispatch={dispatch} />
-			<div className="inputsBotContainer">{labels ? layout.valuesBot : layout.inputsBot}</div>
-		</div>
+            <div 
+                className="ladder"
+                style={{
+                    width: layout.count === 1 ? "20%" : 
+                        layout.count === 2 ? "40%" :
+                        layout.count === 3 ? "60%" :
+                        layout.count === 4 ? "80%" :
+                        "100%"
+                }}
+            >
+                <div className="inputsTopContainer">{labels ? layout.valuesTop : layout.inputsTop}</div>
+                <Grid doTraverse={doTraverse} active={layout.activeRungs} layout={layout} dispatch={dispatch} />
+                <div className="inputsBotContainer">{labels ? layout.valuesBot : layout.inputsBot}</div>
+            </div>
+        </div>
 	)
 }

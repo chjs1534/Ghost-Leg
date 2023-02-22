@@ -5,7 +5,8 @@ export const INITIAL_STATE = {
     valuesTop: [],
     valuesBot: [],
     visited: [],
-    activeRungs: []
+    activeRungs: [],
+    match: [-1, -1]
 };
 
 export const layoutReducer = (state, action) => {
@@ -53,20 +54,30 @@ export const layoutReducer = (state, action) => {
                 ...state,
                 valuesTop: state.valuesTop.map(
                     (el, i) => {
-                        return <div 
-                            key={i} 
-                            className="inputsText" 
-                            onClick={() => action.fn(i)}
-                        >{el}</div>
+                        return <div key={i} className="inputsText" >
+                            <p 
+                                className="text" 
+                                onClick={() => action.fn(i)}
+                                style={{
+                                    color: state.match[0] === i ? "red" : "black"
+                                }}
+                            >
+                                {el}
+                            </p>
+                        </div>
                     }
                 ),
                 valuesBot: state.valuesBot.map(
                     (el, i) => {
-                        return <div 
-                            key={i} 
-                            className="inputsText" 
-                            onClick={() => action.fn(i)}
-                        >{el}</div>
+                        return <div key={i} className="inputsText" >
+                            <p 
+                                style={{
+                                    color: state.match[1] === i ? "red" : "black"
+                                }}
+                            >   
+                                {el}
+                            </p>
+                        </div>
                     }
                 )
             }
@@ -88,6 +99,11 @@ export const layoutReducer = (state, action) => {
             return {
                 ...state,
                 activeRungs: temp
+            }
+        case "ADDMATCH":
+            return {
+                ...state,
+                match: [action.top, action.bot]
             }
     }
 }

@@ -5,7 +5,7 @@ import Box from "./components/Box";
 
 const App = () => {
     return (
-		<div>
+		<div className="screen">
 			<Setter />
 			{/* <Box count={count} inputsTop={inputsTop} inputsBot={inputsBot} setInputsTop={setInputsTop}
 				setInputsBot={setInputsBot} topValues={topValues} botValues={botValues}

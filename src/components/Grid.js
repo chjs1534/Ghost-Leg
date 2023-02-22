@@ -2,7 +2,7 @@ import { useEffect, useState} from "react"
 import Node from "./Node"
 
 export default function Grid(props) { 
-    const layout = props.layout
+    const [layout, dispatch] = [props.layout, props.dispatch]
 	const iMax = 50
 	const jMax = layout.count
     const [visited, setVisited] = useState(new Map())
@@ -28,6 +28,9 @@ export default function Grid(props) {
                     setCol(col => col - 1)
                 }
                 setRow(row => row + 1)
+                if (row === iMax) {
+                    dispatch({type: "ADDMATCH", top: props.doTraverse, bot: col})
+                }
             }, 100)
         }
     }, [row])

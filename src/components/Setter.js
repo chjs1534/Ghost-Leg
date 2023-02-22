@@ -50,7 +50,7 @@ export default function Setter() {
 	return (
 		<div className="page">
             <div className="controls">
-                <button onClick={generateRungs}>Start</button>  
+                <button className="start" onClick={generateRungs}>Start</button>  
                 <div className="counter">
                     <button onClick={decrement} className="button">-</button>
                     <h1>{layout.count}</h1>
