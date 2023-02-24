@@ -4,9 +4,10 @@ export const INITIAL_STATE = {
     inputsBot: [],
     valuesTop: [],
     valuesBot: [],
+    textTop: [],
+    textBot: [],
     visited: [],
-    activeRungs: [],
-    match: [-1, -1]
+    activeRungs: []
 };
 
 export const layoutReducer = (state, action) => {
@@ -19,8 +20,10 @@ export const layoutReducer = (state, action) => {
                     action.inputTop],
                 inputsBot: [...state.inputsBot, 
                     action.inputBot],
-                valuesTop: [...state.valuesTop, ""],
-                valuesBot: [...state.valuesBot, ""]
+                textTop: [...state.textTop, ""],
+                textBot: [...state.textBot, ""],
+                valuesTop: [...state.valuesTop, <></>],
+                valuesBot: [...state.valuesBot, <></>]
             };
         case "DECREMENT":
             return {
@@ -28,22 +31,24 @@ export const layoutReducer = (state, action) => {
                 count: state.count - 1,
                 inputsTop: state.inputsTop.slice(0, -1),
                 inputsBot: state.inputsBot.slice(0, -1),
+                textTop: state.textTop.slice(0, -1),
+                textBot: state.textBot.slice(0, -1),
                 valuesTop: state.valuesTop.slice(0, -1),
                 valuesBot: state.valuesBot.slice(0, -1)
             }
-        case "SETVALUETOP":
+        case "SETTEXTTOP":
             return {
                 ...state,
-                valuesTop: state.valuesTop.map(
+                textTop: state.textTop.map(
                     (el, i) => {
                         return (action.index === i) ? action.value : el
                     }
                 )
             }
-        case "SETVALUEBOT":
+        case "SETTEXTBOT":
             return {
                 ...state,
-                valuesBot: state.valuesBot.map(
+                textBot: state.textBot.map(
                     (el, i) => {
                         return (action.index === i) ? action.value : el
                     }
@@ -53,30 +58,22 @@ export const layoutReducer = (state, action) => {
             return {
                 ...state,
                 valuesTop: state.valuesTop.map(
-                    (el, i) => {
+                    (_, i) => {
                         return <div key={i} className="inputsText" >
                             <p 
+                                key={i}
                                 className="text" 
                                 onClick={() => action.fn(i)}
-                                style={{
-                                    color: state.match[0] === i ? "red" : "black"
-                                }}
                             >
-                                {el}
+                                {state.textTop.at(i)}   
                             </p>
                         </div>
                     }
                 ),
                 valuesBot: state.valuesBot.map(
-                    (el, i) => {
+                    (_, i) => {
                         return <div key={i} className="inputsText" >
-                            <p 
-                                style={{
-                                    color: state.match[1] === i ? "red" : "black"
-                                }}
-                            >   
-                                {el}
-                            </p>
+                            <p key={i}>{state.textBot.at(i)}</p>
                         </div>
                     }
                 )
@@ -100,10 +97,50 @@ export const layoutReducer = (state, action) => {
                 ...state,
                 activeRungs: temp
             }
-        case "ADDMATCH":
+        case "ADDMATCHTOP":
             return {
                 ...state,
-                match: [action.top, action.bot]
+                valuesTop: state.valuesTop.map(
+                    (_, i) => {
+                        return <div key={i} className="inputsText" >
+                                <p 
+                                    className="text" 
+                                    onClick={() => action.fn(i)}
+                                    style={{color: action.index === i ? "red" : "black"}}
+                                >
+                                    {state.textTop[i]}
+                                </p>
+                            </div> 
+                    }
+                ),
+                valuesBot: state.valuesBot.map(
+                    (el, i) => {
+                        return <div key={i} className="inputsText" >
+                                <p 
+                                    key={i}
+                                    style={{color: "black"}}
+                                >
+                                    {state.textBot.at(i)}
+                                </p>
+                            </div>
+                    }
+                )
+            }
+        case "ADDMATCHBOT":
+            return {
+                ...state,
+                valuesBot: state.valuesBot.map(
+                    (el, i) => {
+                        return <div key={i} className="inputsText" >
+                                <p 
+                                    key={i}
+                                    style={{color: action.index === i ? "red" : "black"}}
+                                >
+                                    {state.textBot.at(i)}
+                                </p>
+                            </div>
+                    }
+                )
             }
     }
 }

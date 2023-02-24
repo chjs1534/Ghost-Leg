@@ -28,8 +28,8 @@ export default function Grid(props) {
                     setCol(col => col - 1)
                 }
                 setRow(row => row + 1)
-                if (row === iMax) {
-                    dispatch({type: "ADDMATCH", top: props.doTraverse, bot: col})
+                if (row === iMax-1) {
+                    dispatch({type: "ADDMATCHBOT", index: col})
                 }
             }, 100)
         }
@@ -40,6 +40,7 @@ export default function Grid(props) {
             setVisited(vis => new Map(vis.clear()))
             setCol(props.doTraverse)
             setRow(0)
+            dispatch({type: "ADDMATCHTOP", fn:props.setTraverse, index: props.doTraverse}) 
         }
     }, [props.doTraverse])
 

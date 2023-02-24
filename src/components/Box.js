@@ -29,9 +29,24 @@ export default function Box(props) {
                         "100%"
                 }}
             >
-                <div className="inputsTopContainer">{labels ? layout.valuesTop : layout.inputsTop}</div>
-                <Grid doTraverse={doTraverse} active={layout.activeRungs} layout={layout} dispatch={dispatch} />
-                <div className="inputsBotContainer">{labels ? layout.valuesBot : layout.inputsBot}</div>
+                <div 
+                    className="inputsTopContainer"
+                    style={{
+                        marginBottom: labels ? "0px" : "10px"
+                    }}
+                >
+                    {labels ? layout.valuesTop : layout.inputsTop}
+                </div>
+                <Grid setTraverse={setTraverse} doTraverse={doTraverse} active={layout.activeRungs} 
+                    layout={layout} dispatch={dispatch} />
+                <div 
+                    className="inputsBotContainer"
+                    style={{
+                        marginTop: labels ? "0px" : "10px"
+                    }}
+                >
+                    {labels ? layout.valuesBot : layout.inputsBot}
+                </div>
             </div>
         </div>
 	)

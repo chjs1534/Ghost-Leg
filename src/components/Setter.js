@@ -1,20 +1,21 @@
-import { useReducer } from "react"
+import { useReducer, useState } from "react"
 import Box from "./Box"
 import { INITIAL_STATE, layoutReducer } from "./layoutReducer"
 
 export default function Setter() {
     const [layout, dispatch] = useReducer(layoutReducer, INITIAL_STATE)
+    const [started, setStarted] = useState(false)
 
 	const increment = () => {
         const handleIn = (e, index, colType) => {
             dispatch({
-                type:`SETVALUE${colType}`,
+                type:`SETTEXT${colType}`,
                 index:index,
                 value:e.target.value
             })
         }
 
-		if (layout.count < 6) {
+		if (layout.count < 10 && !started) {
 			dispatch({
                 type:"INCREMENT", 
                 inputTop: 
@@ -38,15 +39,20 @@ export default function Setter() {
 	}
 
 	const decrement = () => {
-		if (layout.count > 2) {
+		if (layout.count > 1 && !started) {
 			dispatch({type:"DECREMENT"})
 		}
 	}
 
     const generateRungs = () => {
-        dispatch({type:"GENRUNGS"})
+        if (layout.textTop.every((el) => el !== "") 
+            && layout.textBot.every((el) => el !== "")
+            && !started && layout.count !== 0){
+                dispatch({type:"GENRUNGS"})
+                setStarted(true)
+        }
     }
-
+ 
 	return (
 		<div className="page">
             <div className="controls">
